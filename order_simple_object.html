@@ -1,0 +1,137 @@
+<html>
+    <head>
+        <title>Joe's Hotdogs</title>
+        <style>
+            body {
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 20px;
+            }
+
+            h2, h3 {
+                margin-top: 40px;
+                text-align: center;
+            }
+
+            #container {
+                display:flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            #contents {
+                margin-top: 10px;
+                display: flex;
+                flex-direction: column;
+                align-content: space-between;                
+            }
+
+            .itemContainer{
+                display: flex;
+                flex-direction: row;
+            }
+
+            .itemTotal-space{
+                padding-left: 0.2em;
+            }
+
+            input {
+                width: 100px;
+                margin: 5px;
+            }
+
+            .display-hide {
+                display: none;
+            }
+            </style>
+    </head>
+    <body>
+        <h2>Joe's Hotdogs</h2>
+        <h3>Menu</h3>
+        <div id="container">            
+            <div id="contents"></div>
+            <script>
+                let contentsContainer;
+                var itemOrder;
+                var totalCost = 0;
+                var itemTotal;
+                flag = true;
+
+                var menu = {
+                    Hotdogs: 4,
+                    Fries: 3.5,
+                    Soda: 1.5,
+                    Sauerkraut: 1
+                }
+
+                menuItems = Object.keys(menu);
+                displayItems(flag);
+
+                function displayItems(flagSwitch)
+                {
+                    contentsContainer = document.getElementById("contents");
+                    menuItems.forEach(item => {
+                        if (flag != false)
+                        {
+                            var itemContainer = document.createElement("div");
+                            itemContainer.classList.add("itemContainer");  
+                            var itemLabel = document.createElement("label");
+                            itemLabel.setAttribute("id", "lbl-" + item);
+                            itemLabel.innerText = item + ": $" + menu[item] + " - Qty:";
+                            itemOrder = document.createElement("input");
+                            itemOrder.setAttribute("type", "number");
+                            itemOrder.setAttribute("min", 0);
+                            itemOrder.setAttribute("id", item);
+                            itemTotal = document.createElement("span");
+                            itemTotal.setAttribute("id", item + "-total");
+                            itemTotal.classList.add("itemTotal-space");
+                            itemContainer.appendChild(itemLabel);
+                            itemContainer.appendChild(itemOrder);
+                            itemContainer.appendChild(itemTotal);
+                            contentsContainer.appendChild(itemContainer);
+                        }                        
+                    });
+                }
+
+                if (flag != false)
+                {
+                    var order = document.createElement("input");
+                    order.setAttribute("type", "submit")
+                    order.setAttribute("value", "Place Order")
+                    contentsContainer.appendChild(order);
+                    order.addEventListener("click", orderSubmit)                    
+                }
+
+                function orderSubmit() 
+                {                    
+                    menuItems.forEach(item => {
+                        order.classList.add("display-hide");
+                        let qtyEle = document.getElementById(item);
+                        let qty = qtyEle.value;
+                        let itemTotalEle = document.getElementById(item + "-total");
+                        let itemLabel = document.getElementById("lbl-" + item);
+                        itemLabel.innerText += qty;
+                        console.log(menu[item]);
+                        let itemTotal = parseFloat(menu[item]) * qty
+                        if (itemTotalEle)
+                        {
+                            itemTotalEle.innerText = "= $" + itemTotal;
+                            qtyEle.classList.add("display-hide");
+                        }
+                        console.log(itemTotal);
+                        totalCost += itemTotal; 
+                        flag = false;                       
+                    });
+
+                    if (flag != true)
+                    {
+                        var totalLabel = document.createElement("label");
+                        console.log(totalCost);
+                        totalLabel.setAttribute("id", "total")
+                        totalLabel.innerText = "Order Total : " + totalCost;
+                        contentsContainer.appendChild(totalLabel);
+                    }                 
+                }             
+            </script>
+        </div>        
+    </body>
+</html>
